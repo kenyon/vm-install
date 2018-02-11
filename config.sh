@@ -13,6 +13,8 @@ CONFIG=( # Set some values
   [VM_CPU]="2"
   [VM_DISK]="25" # GB
   [VM_INTERFACE]="br0"
+  # Default build type - leave as basic unless you design it otherwise
+  [VM_TYPE]="basic"
   # Location to store the images
   [VM_DISKLOC]=/opt/libvirt/images/
   # Preseed Settings

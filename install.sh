@@ -1,5 +1,6 @@
 #!/bin/bash
 # A modified variant of Dmitri Popov's script to be a little more flexible.
+# https://github.com/pin/debian-vm-install
 # Make sure to update the config.sh with your settings.
 
 # I wouldn't modify anything below this unless you know what you are doing.
@@ -18,15 +19,6 @@ generate_mac() {
   echo ${MACPART}${MACGEN}
 }
 
-
-# Load our configuration
-if [ ! -f ./config.sh ]; then
-  echo "Configuration file missing!"
-  return
-else
-  source ./config.sh
-fi
-
 if [ $# -lt 1 ]
 then
     cat <<EOF
@@ -35,6 +27,7 @@ Usage: $0 -n <Name> -r <RAM> -c <CPU> -d <DISK> -mac <MAC>
   -r       Sets the amount of memory to allocate in MB
   -c       Sets the number of vCPUs to assign
   -d       Sets the size of the disk in GB
+  -t       Sets the type of server this will be. Uses default-postinst.sh
   -mac     Sets the MAC address. Leave blank for random.
 
 Examples:
@@ -49,6 +42,14 @@ Examples:
   ${BOLD}$0 vmtest${NORM}
 EOF
     exit 1
+fi
+
+# Load our configuration
+if [ ! -f ./config.sh ]; then
+  echo "Configuration file missing!"
+  return
+else
+  source ./config.sh
 fi
 
 # Parse arguments
@@ -82,6 +83,11 @@ case $key in
     shift
     shift
     ;;
+    -t)
+    BUILD_TYPE="$2"
+    shift
+    shift
+    ;;
     *)
     POSITIONAL+=("$1")
     shift
@@ -111,6 +117,10 @@ if [[ ! -n "${DISK+set}" || -z "$DISK" ]]; then
     echo "Setting disk size from configuration..."
     DISK=${CONFIG[VM_DISK]}
 fi
+if [[ ! -n "${BUILD_TYPE+set}" || -z "$BUILD_TYPE" ]]; then
+    echo "Setting build type from configuration..."
+    BUILD_TYPE=${CONFIG[VM_TYPE]}
+fi
 # MAC address verification.
 if [[ -n  "${MAC+set}" ]]; then
     if [[ ! ${MAC} =~ ^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$ ]]; then
@@ -130,7 +140,8 @@ echo -ne "${BOLD}Provisioning VM with parameters:${NORM}
   RAM:   ${RAM}mb
   vCPUs: ${CPU}
   Disk:  ${DISK}gb
-  MAC:   ${MAC}\n
+  MAC:   ${MAC}
+  Type:  ${BUILD_TYPE}\n
 Using the following settings from the configuration:
   Dist:    ${CONFIG[DIST_URL]}
   Variant: ${CONFIG[DIST_VARIANT]}\n"
@@ -168,20 +179,16 @@ case "${CONFIG[PS_SSHKEY_SOURCE]}" in
         exit 1
 esac
 
-
-
 echo "${BOLD}Starting process...${NORM}"
-
 # Create tarball with some stuff we would like to install into the system.
 echo "Creating postinst tarball..."
 tar cvfz postinst.tar.gz postinst
 
-
 # Set our temporary filenames and remove the leading ./
-TEMP_PRESEED=$(tempfile -d . -p seed -s .cfg | cut -c 3-)
 TEMP_POSTINST=$(tempfile -d . -p post -s .sh | cut -c 3-)
 # Set up preseed
 echo "Setting parameters on preseed from configuration..."
+TEMP_PRESEED="preseed.cfg"
 cat default-preseed.cfg > ${TEMP_PRESEED}
 # Use sed to replace placeholders from our configuration.
 sed -i "s/PS_POSTINST_FILENAME/${TEMP_POSTINST}/g" ${TEMP_PRESEED}
@@ -192,11 +199,12 @@ done
 
 echo "Setting parameters on postinst.sh from configuration..."
 cat default-postinst.sh > ${TEMP_POSTINST}
+sed -i "s/VM_TYPE/${BUILD_TYPE}/g" ${TEMP_POSTINST}
 for REPL in ${POSTINST_REPLACE[@]};
 do echo "Setting ${REPL} -> ${CONFIG[$REPL]}"
    sed -i "s/${REPL}/${CONFIG[$REPL]}/g" ${TEMP_POSTINST}
 done
-
+echo "${BOLD}Initiating VM creation.${NORM}"
 virt-install \
 --connect=qemu:///system \
 --name=${NAME} \
@@ -217,11 +225,7 @@ virt-install \
 --extra-args="auto=true hostname="${NAME}" domain="${CONFIG[DOMAIN]}" console=tty0 console=ttyS0,115200n8 serial"
 
 echo "Cleaning up..."
-#rm -v postinst.tar.gz ${TEMP_PRESEED} ${TEMP_POSTINST}
+rm -v postinst.tar.gz ${TEMP_PRESEED} ${TEMP_POSTINST}
 echo "Done! Connect to the system using ${BOLD}virsh console ${NAME}${NORM}.
-
-You can also find the IP address by running the command below when it's installing.
-
-${BOLD}ip neighbor | grep -i ${MAC}${NORM}
 
 Enjoy!"
