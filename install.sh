@@ -90,8 +90,11 @@ esac
 done
 set -- "${POSITIONAL[@]}"
 # Check our variables are set from the arguments, otherwise use defaults
-# If our name is not set or empty, fail.
-if [[ ! -n "${NAME+set}" || -z "$NAME" ]]; then
+# If we only have two args, use the name and go. If our name is not set or empty, fail.
+if [[ $# -eq 1 ]]; then
+    echo "Setting name ${1}"
+    NAME=${1}
+elif [[ ! -n "${NAME+set}" || -z "$NAME" ]]; then
     echo "${BOLD}No name passed. Failing.${NORM}"
     exit 1
 fi
@@ -132,30 +135,93 @@ Using the following settings from the configuration:
   Dist:    ${CONFIG[DIST_URL]}
   Variant: ${CONFIG[DIST_VARIANT]}\n"
 
-# Commented out until we're done with parameters
-# Fetch SSH key from github.
-#wget -q https://github.com/pin.keys -O postinst/authorized_keys
+# Figure out where we want to get our key from, and pull it.
+case "${CONFIG[PS_SSHKEY_SOURCE]}" in
+    github)
+        # Get our key from github
+        if [[ -n "${CONFIG[PS_SSHKEY_GITHUB]}" ]]; then
+            echo "Grabbing SSH key from Github at: ${CONFIG[PS_SSHKEY_GITHUB]}"
+            wget -q ${CONFIG[PS_SSHKEY_GITHUB]} -O postinst/authorized_keys || { echo "Failed to download file. Check your URL." ; exit 1; }
+        else
+            echo "${BOLD}Told to use key source ${CONFIG[PS_SSHKEY_SOURCE]}, but the variable is not set.${NORM}"
+            exit 1
+        fi
+        ;;
+    config)
+        # Get our key from the configuration
+        if [[ -n "${CONFIG[PS_SSHKEY_HARDSET]}" ]]; then
+            echo ${CONFIG[PS_SSHKEY_HARDSET]} > postinst/authorized_keys
+        fi
+        ;;
+    user)
+        # Pull the user's pubkey
+        if [ -f ~/.ssh/id_rsa.pub ]; then
+            cat ~/.ssh/id_rsa.pub > postinst/authorized_keys
+        else
+            echo "${BOLD}Told to grab user key, but cannot find it at ~/.ssh/id_rsa.pub${NORM}"
+            exit 1
+        fi
+        ;;
+    *)
+        # Invalid entries
+        echo "${BOLD}Key source '${CONFIG[PS_SSHKEY_SOURCE]}' invalid. Must be github, config, or user${NORM}"
+        exit 1
+esac
+
+
+
+echo "${BOLD}Starting process...${NORM}"
 
 # Create tarball with some stuff we would like to install into the system.
-#tar cvfz postinst.tar.gz postinst
- 
-#virt-install \
-#--connect=qemu:///system \
-#--name=${NAME} \
-#--ram=${RAM} \
-#--vcpus=${CPU} \
-#--disk size=${DISK},path=${CONFIG[VM_DISKLOC]}${NAME}.img,bus=virtio,cache=none \
-#--initrd-inject=preseed.cfg \
-#--initrd-inject=postinst.sh \
-#--initrd-inject=postinst.tar.gz \
-#--location ${CONFIG[DIST_URL]} \
-#--os-type linux \
-#--os-variant ${CONFIG[DIST_VARIANT]} \
-#--virt-type=kvm \
-#--controller usb,model=none \
-#--graphics none \
-#--noautoconsole \
-#--network bridge=br0,mac=${MAC},model=virtio \
-#--extra-args="auto=true hostname="${NAME}" domain="${CONFIG[DOMAIN]}" console=tty0 console=ttyS0,115200n8 serial"
+echo "Creating postinst tarball..."
+tar cvfz postinst.tar.gz postinst
 
-#rm postinst.tar.gz
+
+# Set our temporary filenames and remove the leading ./
+TEMP_PRESEED=$(tempfile -d . -p seed -s .cfg | cut -c 3-)
+TEMP_POSTINST=$(tempfile -d . -p post -s .sh | cut -c 3-)
+# Set up preseed
+echo "Setting parameters on preseed from configuration..."
+cat default-preseed.cfg > ${TEMP_PRESEED}
+# Use sed to replace placeholders from our configuration.
+sed -i "s/PS_POSTINST_FILENAME/${TEMP_POSTINST}/g" ${TEMP_PRESEED}
+for REPL in ${PRESEED_REPLACE[@]};
+do echo "Setting ${REPL} -> ${CONFIG[$REPL]}"
+   sed -i "s/${REPL}/${CONFIG[$REPL]}/g" ${TEMP_PRESEED}
+done
+
+echo "Setting parameters on postinst.sh from configuration..."
+cat default-postinst.sh > ${TEMP_POSTINST}
+for REPL in ${POSTINST_REPLACE[@]};
+do echo "Setting ${REPL} -> ${CONFIG[$REPL]}"
+   sed -i "s/${REPL}/${CONFIG[$REPL]}/g" ${TEMP_POSTINST}
+done
+
+virt-install \
+--connect=qemu:///system \
+--name=${NAME} \
+--ram=${RAM} \
+--vcpus=${CPU} \
+--disk size=${DISK},path=${CONFIG[VM_DISKLOC]}${NAME}.img,bus=virtio,cache=none \
+--initrd-inject=${TEMP_PRESEED} \
+--initrd-inject=${TEMP_POSTINST} \
+--initrd-inject=postinst.tar.gz \
+--location ${CONFIG[DIST_URL]} \
+--os-type linux \
+--os-variant ${CONFIG[DIST_VARIANT]} \
+--virt-type=kvm \
+--controller usb,model=none \
+--graphics none \
+--noautoconsole \
+--network bridge=${CONFIG[VM_INTERFACE]},mac=${MAC},model=virtio \
+--extra-args="auto=true hostname="${NAME}" domain="${CONFIG[DOMAIN]}" console=tty0 console=ttyS0,115200n8 serial"
+
+echo "Cleaning up..."
+#rm -v postinst.tar.gz ${TEMP_PRESEED} ${TEMP_POSTINST}
+echo "Done! Connect to the system using ${BOLD}virsh console ${NAME}${NORM}.
+
+You can also find the IP address by running the command below when it's installing.
+
+${BOLD}ip neighbor | grep -i ${MAC}${NORM}
+
+Enjoy!"
