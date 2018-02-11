@@ -25,10 +25,12 @@ CONFIG=( # Set some values
   [PS_DEB_MIRROR]="ftp.us.debian.org"
   # Be sure to escape the forward slash in the TZ setting.
   [PS_TZ]="America\/New_York"
-  # Set the source of the key. Github, config, or user.
-  [PS_SSHKEY_SOURCE]="github"
+  # Set the source of the key. github, config, or user.
+  [PS_SSHKEY_SOURCE]="config"
   [PS_SSHKEY_GITHUB]="https://github.com/TaylorBurnham.keys"
-  [PS_SSHKEY_HARDSET]="ssh-rsa example"
+  [PS_SSHKEY_SET]="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDyzTwXgyKuc7jA604jtytWzVTxLhUHVVjQXXiD7sV+kf3+CY9K1Lbgh5SK2VYATR3fmkKAhSJE+PmGscq5VpU75+NjSWhWGI6i18wqa4hHPKJGtx1UMrdVtExnenN6odNxkNcVmZKqAwpy8RP7pwQcWVO/+ghF/tGA6lpxPy5LWBrjjYoVoQiGK6FwIcskxFN3gDSvHOQmI5isin/1wDpb/DXrPn0Fe0l9Csc/AAB1jiZKS2FgS5cNUT0QBr72HGQmI2ztugQmN2z5pvRWP9iuL7TXbSuht9RN18iQvp+oi18YMYtSL10L4Kq0lUeEKSr4ukXeeCGH/xg4KfofB++D"
 )
+# Don't change these or the configuration will not merge correctly on provision
 declare -a PRESEED_REPLACE=('PS_USER_FULLNAME' 'PS_USERNAME' 'PS_LOCALE' 'PS_KEYBOARD' 'PS_DEB_MIRROR' 'PS_TZ')
 declare -a POSTINST_REPLACE=('PS_USERNAME')
+

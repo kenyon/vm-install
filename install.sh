@@ -160,8 +160,8 @@ case "${CONFIG[PS_SSHKEY_SOURCE]}" in
         ;;
     config)
         # Get our key from the configuration
-        if [[ -n "${CONFIG[PS_SSHKEY_HARDSET]}" ]]; then
-            echo ${CONFIG[PS_SSHKEY_HARDSET]} > postinst/authorized_keys
+        if [[ -n "${CONFIG[PS_SSHKEY_SET]}" ]]; then
+            echo ${CONFIG[PS_SSHKEY_SET]} > postinst/authorized_keys
         fi
         ;;
     user)
