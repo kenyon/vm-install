@@ -4,10 +4,8 @@ This is an automated script that will make use of **virt-install** to
 configure and deploy a Debian system without any user interaction. Just
 set it and let it go. Utilizes the **preseed** config to run unattended.
 
-This script is based off one written by [Dmitri Popov](https://github.com/pin)
-located here: [debian-vm-install](https://github.com/pin/debian-vm-install). Dmitri's
-intent was for the script he wrote to be used by someone to write their own, and this
-is the result spending a morning working on it.
+This script is based on one written by [Dmitri Popov](https://github.com/pin)
+located here: [debian-vm-install](https://github.com/pin/debian-vm-install).
 
 ```
 Usage: ./install.sh -n <Name> -r <RAM> -c <CPU> -d <DISK> -mac <MAC>
@@ -30,7 +28,6 @@ Examples:
   ./install.sh vmtest
 ```
 
-Guest OS out of the box is minimal with no GUI and serial console support so you can
 Guest OS is minimal no-GUI Debian installation configured with serial console
 for ability to `virsh console <GUEST_NAME>`, and OpenSSH server with your SSH
 key or/and password pre-configured.
