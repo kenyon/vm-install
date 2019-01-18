@@ -4,8 +4,8 @@ This is an automated script that will make use of **virt-install** to
 configure and deploy a Debian system without any user interaction. Just
 set it and let it go. Utilizes the **preseed** config to run unattended.
 
-This script is based off one written by [Dmitri Popov](https://github.com/pin) 
-located here: [debian-vm-install](https://github.com/pin/debian-vm-install). Dmitri's 
+This script is based off one written by [Dmitri Popov](https://github.com/pin)
+located here: [debian-vm-install](https://github.com/pin/debian-vm-install). Dmitri's
 intent was for the script he wrote to be used by someone to write their own, and this
 is the result spending a morning working on it.
 
@@ -30,7 +30,7 @@ Examples:
   ./install.sh vmtest
 ```
 
-Guest OS out of the box is minimal with no GUI and serial console support so you can 
+Guest OS out of the box is minimal with no GUI and serial console support so you can
 Guest OS is minimal no-GUI Debian installation configured with serial console
 for ability to `virsh console <GUEST_NAME>`, and OpenSSH server with your SSH
 key or/and password pre-configured.
@@ -46,9 +46,9 @@ Things to do before you run
 -------------------------------------
 Update `config.sh` with the following values:
 
- * `DOMAIN`: Sets the domain. You can also use `/bin/hostname -d` to use what DHCP 
+ * `DOMAIN`: Sets the domain. You can also use `/bin/hostname -d` to use what DHCP
  assigned the host.
- * `DIST_URL`: Sets the URL for your distribution. By default this is using the 
+ * `DIST_URL`: Sets the URL for your distribution. By default this is using the
  CDN mirror by Debian, but depending on your country you may want to change this
  to reflect somewhere closer/faster. `netselect` is a utility that can help with
  selecting a good low latency mirror, along with a `wget` or `curl` throughput test.
@@ -62,18 +62,18 @@ Update `config.sh` with the following values:
  * `PS_USERNAME`: The user name to set the default user to.
  * `PS_LOCALE`: The system locale.
  * `PS_KEYBOARD`: The type of keyboard.
- * `PS_DEB_MIRROR`: The mirror to use for downloading packages. See `DIST_URL` 
- for more selection information. 
- * `PS_TZ`: The timezone to use. Take care to escape the forward slash. 
+ * `PS_DEB_MIRROR`: The mirror to use for downloading packages. See `DIST_URL`
+ for more selection information.
+ * `PS_TZ`: The timezone to use. Take care to escape the forward slash.
  Example: `America\/New_York`.
  * `PS_SSHKEY_SOURCE`: The source of the SSH key. Options: `github`, `config`, `user`.
- * `PS_SSHKEY_GITHUB`: The URL to your public key on your git profile. 
+ * `PS_SSHKEY_GITHUB`: The URL to your public key on your git profile.
  Example: `https://github.com/TaylorBurnham.keys`.
- * `PS_SSHKEY_SET`: If you set `config` for the `PS_SSHKEY_SOURCE` you will need 
+ * `PS_SSHKEY_SET`: If you set `config` for the `PS_SSHKEY_SOURCE` you will need
  to paste the full contents of the `ssh-rsa` string in this variable. This is
  handy if you use different keys for your lab vs. production.
- 
- 
+
+
 Some considerations from Dmitri's original README:
  * It's worth considering to enable password authentication in `preseed.cfg`
    at least during first run so you could `virsh console <GUEST_NAME>` in case
@@ -85,7 +85,7 @@ Network configuration
 The script works best with a bridged network where guests are able to use
 the local DHCP server. There's other more advanced options you can work with
 if you are using completely private networking, but that is not part of my
-needed use case. 
+needed use case.
 
 You may update `VM_INTERFACE` in the `config.sh` to specify a different
 interface.
