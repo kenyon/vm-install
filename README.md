@@ -118,3 +118,9 @@ More Info and References
 * https://github.com/pin/debian-vm-install
 * https://wiki.debian.org/Keyboard
 * https://wiki.debian.org/Locale
+
+<!--
+Local Variables:
+coding: utf-8
+End:
+-->
