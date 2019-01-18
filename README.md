@@ -7,40 +7,23 @@ set it and let it go. Utilizes the **preseed** config to run unattended.
 This script is based on one written by [Dmitri Popov](https://github.com/pin)
 located here: [debian-vm-install](https://github.com/pin/debian-vm-install).
 
-```
-Usage: ./install.sh -n <Name> -r <RAM> -c <CPU> -d <DISK> -mac <MAC>
-  -n       Sets the guest, VM, and disk name. Required.
-  -r       Sets the amount of memory to allocate in MB
-  -c       Sets the number of vCPUs to assign
-  -d       Sets the size of the disk in GB
-  -t       Sets the type of server this will be. Uses default-postinst.sh
-  -mac     Sets the MAC address. Leave blank for random.
+## Usage
 
-Examples:
-  This will create a guest named "webserver" with 512mb
-  RAM, 2 vCPUs, 25GB disk, and an assigned MAC address.
-
-  ./install.sh webserver -r 512 -c 2 -d 25 -mac 52:54:00:bf:b3:80
-
-  This will create a guest using the defaults inherited from
-  config.sh named "vmtest" with a random MAC.
-
-  ./install.sh vmtest
-```
+Run `./install.sh` without any arguments for usage info.
 
 Guest OS is minimal no-GUI Debian installation configured with serial console
 for ability to `virsh console <GUEST_NAME>`, and OpenSSH server with your SSH
 key or/and password pre-configured.
 
-Prerequisites
--------------
+## Prerequisites
+
 I was able to run this out of the box after installing the following on a fresh
 Debian 9.x host.
 
  * `apt-get install qemu-kvm libvirt-clients libvirt-daemon-system virtinst`
 
-Things to do before you run
--------------------------------------
+## Things to do before you run
+
 Update `config.sh` with the following values:
 
  * `DOMAIN`: Sets the domain. You can also use `/bin/hostname -d` to use what DHCP
@@ -71,14 +54,14 @@ Update `config.sh` with the following values:
  handy if you use different keys for your lab vs. production.
 
 
-Some considerations from Dmitri's original README:
+Some considerations:
  * It's worth considering to enable password authentication in `preseed.cfg`
    at least during first run so you could `virsh console <GUEST_NAME>` in case
    network connection in guest does not comes up with DHCP or IP of the guest
    is unclear.
 
-Network configuration
----------------------
+## Network configuration
+
 The script works best with a bridged network where guests are able to use
 the local DHCP server. There's other more advanced options you can work with
 if you are using completely private networking, but that is not part of my
@@ -109,8 +92,8 @@ iface br0 inet dhcp
   bridge_maxwait 0
 ```
 
-More Info and References
----------
+## More Info and References
+
 * https://www.debian.org/releases/stable/example-preseed.txt
 * https://github.com/pin/debian-vm-install
 * https://wiki.debian.org/Keyboard
