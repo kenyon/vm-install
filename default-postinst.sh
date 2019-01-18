@@ -1,4 +1,5 @@
 #!/bin/sh
+# -*- coding: utf-8 -*-
 # This script is run by debian installer using preseed/late_command
 # directive, see preseed.cfg
 BUILD_TYPE="VM_TYPE"

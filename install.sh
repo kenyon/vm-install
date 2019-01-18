@@ -1,4 +1,5 @@
 #!/bin/bash
+# -*- coding: utf-8 -*-
 # A modified variant of Dmitri Popov's script to be a little more flexible.
 # https://github.com/pin/debian-vm-install
 # Make sure to update the config.sh with your settings.

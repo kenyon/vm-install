@@ -1,4 +1,5 @@
 #!/bin/bash
+# -*- coding: utf-8 -*-
 typeset -A CONFIG # Create our array
 CONFIG=( # Set some values
   # Domain can be pulled from the host FQDN or hard set.
