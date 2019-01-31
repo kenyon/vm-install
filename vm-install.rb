@@ -53,7 +53,11 @@ configuration, which defaults to #{default_config}.\n\n"
     exit
   end
 
-  opts.on('--version', 'Output version information and exit') do
+  opts.on(
+    '-V',
+    '--version',
+    'Output version information and exit'
+  ) do
     puts "#{opts.program_name} #{opts.version}"
     puts "Copyright © 2019 Kenyon Ralph
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
