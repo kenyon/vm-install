@@ -10,6 +10,8 @@ defaults: &defaults
   connect: qemu:///system
   memory: 8192
 
+# Below are presets that can be passed to vm-install.rb.
+
 debian:
   <<: *defaults
 
