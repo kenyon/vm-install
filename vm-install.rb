@@ -41,9 +41,10 @@ configuration, which defaults to #{default_config}.\n\n"
   end
 
   opts.on(
+    :REQUIRED,
     '-pPRESET',
     '--preset=PRESET',
-    'virt-install options presets to use'
+    'virt-install options presets to use (required)'
   ) do |d|
     options.preset = d
   end
@@ -74,9 +75,10 @@ raise(ArgumentError, 'Invalid number of arguments') if ARGV.length > 1
 cfg_file = ARGV[0].nil? ? default_config : ARGV[0]
 config = Psych.load_file(cfg_file)
 
+raise(ArgumentError, 'Preset not specified; see --help') if options.preset.nil?
+
 if config[options.preset].nil?
-  raise(ArgumentError, 'Invalid preset specified: ' \
-                       + options.preset)
+  raise(ArgumentError, 'Preset "' + options.preset + '" not found in ' + cfg_file)
 end
 
 cmd = 'virt-install'
