@@ -1,6 +1,6 @@
 %YAML 1.1
 ---
-# Configuration file for vm-install.rb
+# Configuration file for vm-install
 
 # Keys in the mappings below are virt-install(1) options, and values
 # are the arguments to those options, just like you would specify on
