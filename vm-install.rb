@@ -26,30 +26,36 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 
-default_config = 'config.yml'
+default_cfg_file = 'vm-install.yml'
 
 options = OpenStruct.new
 
 OptionParser.new do |opts|
   opts.version = version
-  opts.banner = "Usage: #{opts.program_name} [options] [#{default_config}]
-Install a new virtual machine (using virt-install(1)) using given
-configuration, which defaults to #{default_config}.\n\n"
+  opts.banner = "Usage: #{opts.program_name} [options] PRESET
+Install a new virtual machine (using virt-install(1)).\n\n"
 
-  opts.on('-nNAME', '--name=NAME', 'Name to call the new VM') do |n|
+  opts.on(
+    '-nNAME',
+    '--name=NAME',
+    'Name to call the new VM; default: same as PRESET'
+  ) do |n|
     options.name = n
   end
 
   opts.on(
-    :REQUIRED,
-    '-pPRESET',
-    '--preset=PRESET',
-    'virt-install options presets to use (required)'
-  ) do |d|
-    options.preset = d
+    '-cCONFIG',
+    '--config=CONFIG',
+    "config file to use; default: #{default_cfg_file} in the current directory"
+  ) do |c|
+    options.cfg_file = c
   end
 
-  opts.on('-h', '--help', 'Show this help and exit') do
+  opts.on(
+    '-h',
+    '--help',
+    'Show this help and exit'
+  ) do
     puts opts
     exit
   end
@@ -70,18 +76,19 @@ Written by Kenyon Ralph."
   end
 end.parse!
 
-raise(ArgumentError, 'Invalid number of arguments') if ARGV.length > 1
-
-cfg_file = ARGV[0].nil? ? default_config : ARGV[0]
+cfg_file = options.cfg_file.nil? ? default_cfg_file : options.cfg_file
 config = Psych.load_file(cfg_file)
 
+options.preset = ARGV[0]
 raise(ArgumentError, 'Preset not specified; see --help') if options.preset.nil?
 
 if config[options.preset].nil?
   raise(ArgumentError, 'Preset "' + options.preset + '" not found in ' + cfg_file)
 end
 
-cmd = 'virt-install'
+options.name = options.preset if options.name.nil?
+
+cmd = 'virt-install --name ' + options.name
 
 config[options.preset].each_pair do |opt, arg|
   case opt.length == 1
