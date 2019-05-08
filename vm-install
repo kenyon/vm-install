@@ -22,6 +22,7 @@
 # Semantic Versioning. https://semver.org/
 version = '0.0.0'
 
+require 'erb'
 require 'optparse'
 require 'ostruct'
 require 'yaml'
@@ -87,6 +88,13 @@ if config[options.preset].nil?
 end
 
 options.name = options.preset if options.name.nil?
+
+vm_install_options = config.delete('vm-install-options')
+
+preseed_template = ERB.new(File.read(vm_install_options['preseed-template']))
+File.open(vm_install_options['preseed-template'].split('.erb')[0], 'w') do |file|
+  file.puts(preseed_template.result)
+end
 
 cmd = 'virt-install --name ' + options.name
 

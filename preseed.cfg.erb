@@ -1,0 +1,66 @@
+# -*- coding: utf-8; mode: preseed -*-
+#_preseed_V1
+
+d-i debian-installer/locale string en_US.UTF-8
+d-i keyboard-configuration/xkb-keymap select us(dvorak)
+d-i netcfg/choose_interface select auto
+d-i netcfg/get_hostname string <%= options.name %>
+d-i netcfg/get_domain string <%= vm_install_options['domain'] %>
+d-i netcfg/wireless_wep string
+d-i hw-detect/load_firmware boolean false
+d-i mirror/country string manual
+d-i mirror/protocol select https
+d-i mirror/https/hostname string deb.debian.org
+d-i mirror/https/directory string /debian
+d-i mirror/https/proxy string
+d-i mirror/suite string stable
+d-i passwd/root-login boolean false
+d-i passwd/user-fullname string Kenyon Ralph
+d-i passwd/username string kenyon
+# mkpasswd --method=sha-512 <password>
+d-i passwd/user-password-crypted password $6$73Q3R90Pa7X$SQMykofsIwm493F8Jyd5GqXTj5PY3r7RhOnj1rbYd1Y.Ub5zhtzzsQOKqGVijEXPiohRec6y2hueycdXcOr260
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Pacific
+d-i clock-setup/ntp boolean true
+d-i partman-auto/method string regular
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-partitioning/choose_label string gpt
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman-auto/expert_recipe string           \
+     allone ::                                  \
+             1 1 1 free                         \
+                     $bios_boot{ }              \
+                     method{ biosgrub }         \
+             .                                  \
+             538 538 1075 fat32                 \
+                     $primary{ }                \
+                     method{ efi }              \
+                     format{ }                  \
+                     .                          \
+             1000 2000 -1 $default_filesystem   \
+                     $primary{ }                \
+                     $bootable{ }               \
+                     method{ format }           \
+                     format{ }                  \
+                     use_filesystem{ }          \
+                     $default_filesystem{ }     \
+                     mountpoint{ / }            \
+             .                                  \
+             100 512 1000 linux-swap            \
+                     method{ swap }             \
+                     format{ }                  \
+             .
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+tasksel tasksel/first multiselect
+d-i pkgsel/include string ssh
+d-i pkgsel/upgrade select full-upgrade
+popularity-contest popularity-contest/participate boolean true
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+d-i grub-installer/bootdev  string default
+d-i finish-install/reboot_in_progress note

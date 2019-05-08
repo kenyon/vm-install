@@ -2,6 +2,12 @@
 ---
 # Configuration file for vm-install
 
+# Special options, not passed to virt-install.
+
+vm-install-options:
+  preseed-template: preseed.cfg.erb
+  domain: kenyonralph.com
+
 # Keys in the mappings below are virt-install(1) options, and values
 # are the arguments to those options, just like you would specify on
 # the virt-install(1) command line.
