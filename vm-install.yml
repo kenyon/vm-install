@@ -14,15 +14,28 @@ vm-install-options:
 
 defaults: &defaults
   connect: qemu:///system
-  memory: 8192
+  virt-type: kvm
+  memory: 4096
+  cpu: host
+  network: bridge=br0
 
-# Below are presets that can be passed to vm-install.rb.
+# OS defaults
 
-debian:
+debian: &debian
   <<: *defaults
+  os-variant: debian9
+  location: https://deb.debian.org/debian/dists/stable/main/installer-amd64/
+  initrd-inject: preseed.cfg
 
-rhel:
+rhel: &rhel
   <<: *defaults
+  os-variant: rhel7
+
+# Specific VM instances
+
+test1:
+  <<: *debian
+  disk: size=10,path=/data/vms/test1.sda
 
 # Local Variables:
 # coding: utf-8
