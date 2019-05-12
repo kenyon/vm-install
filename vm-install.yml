@@ -18,6 +18,8 @@ defaults: &defaults
   memory: 4096
   cpu: host
   network: bridge=br0
+  console: pty,target_type=virtio
+  serial: pty
 
 # OS defaults
 
