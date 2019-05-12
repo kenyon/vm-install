@@ -22,6 +22,8 @@ defaults: &defaults
   network: bridge=br0
   console: pty,target_type=virtio
   serial: pty
+  # Need package ovmf for UEFI.
+  boot: uefi
 
 # OS defaults
 
