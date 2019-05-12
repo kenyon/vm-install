@@ -57,10 +57,14 @@ d-i partman/confirm_nooverwrite boolean true
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 tasksel tasksel/first multiselect
-d-i pkgsel/include string ssh
+d-i pkgsel/include string ssh wget
 d-i pkgsel/upgrade select full-upgrade
 popularity-contest popularity-contest/participate boolean true
 d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean true
 d-i grub-installer/bootdev  string default
 d-i finish-install/reboot_in_progress note
+d-i preseed/late_command string \
+    in-target mkdir --mode=0700 ~kenyon/.ssh \
+    in-target wget --output-document=~kenyon/.ssh/authorized_keys https://github.com/kenyon.keys \
+    in-target chmod 0600 ~kenyon/.ssh/authorized_keys
