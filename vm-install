@@ -91,9 +91,10 @@ options.name = options.preset if options.name.nil?
 
 vm_install_options = config.delete('vm-install-options')
 
-preseed_template = ERB.new(File.read(vm_install_options['preseed-template']))
-File.open(vm_install_options['preseed-template'].split('.erb')[0], 'w') do |file|
-  file.puts(preseed_template.result)
+vm_install_options['templates'].each do |template|
+  File.open(template.split('.erb')[0], 'w') do |file|
+    file.puts(ERB.new(File.read(template)).result)
+  end
 end
 
 cmd = 'virt-install --name ' + options.name

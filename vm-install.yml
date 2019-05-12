@@ -5,7 +5,9 @@
 # Special options, not passed to virt-install.
 
 vm-install-options:
-  preseed-template: preseed.cfg.erb
+  templates:
+    - preseed.cfg.erb
+    - anaconda-ks.cfg.erb
   domain: kenyonralph.com
 
 # Keys in the mappings below are virt-install(1) options, and values
@@ -29,6 +31,12 @@ debian: &debian
   location: https://deb.debian.org/debian/dists/stable/main/installer-amd64/
   initrd-inject: preseed.cfg
 
+fedora: &fedora
+  <<: *defaults
+  location: https://mirrors.kernel.org/fedora/releases/30/Server/x86_64/os/
+  initrd-inject: anaconda-ks.cfg
+  extra-args: inst.ks=file:/anaconda-ks.cfg
+
 rhel: &rhel
   <<: *defaults
   os-variant: rhel7
@@ -38,6 +46,10 @@ rhel: &rhel
 test1:
   <<: *debian
   disk: size=10,path=/data/vms/test1.sda
+
+test2:
+  <<: *fedora
+  disk: size=10,path=/data/vms/test2.sda
 
 # Local Variables:
 # coding: utf-8

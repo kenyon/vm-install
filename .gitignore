@@ -1,2 +1,3 @@
-# preseed.cfg is generated from a template.
+# Files generated from templates.
+anaconda-ks.cfg
 preseed.cfg

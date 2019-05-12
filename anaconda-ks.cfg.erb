@@ -1,0 +1,34 @@
+text
+url --url="https://mirrors.kernel.org/fedora/releases/30/Server/x86_64/os/"
+
+keyboard --vckeymap=us-dvorak --xlayouts='us (dvorak)'
+lang en_US.UTF-8
+timezone America/Los_Angeles --isUtc
+
+bootloader --location=mbr
+autopart --type=plain
+clearpart --all --initlabel
+
+firewall --disable
+network --bootproto=dhcp --device=link --ipv6=auto --activate
+network --hostname=<%= options.name %>
+
+rootpw --lock
+# mkpasswd --method=sha-512 <password>
+user --groups=wheel --name=kenyon --gecos="Kenyon Ralph" --iscrypted --password=$6$0Kei7rlgaFdbWUV$/32CukUX8PCiL2boQpd7FvudkayRuAemY7V47ysWSDNfJAn1G20zQTjhE14lIF9U0X.75QSYlCuXHRr2Wcw5a/
+sshkey --username=kenyon "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKcX1L+30WOCRpdhUAUBB7MedN2hteApi8E7RUVOPxsO kenyon@einstein"
+
+skipx
+services --enabled=chronyd,sshd
+
+logging --host=darwin.kenyonralph.com
+
+reboot
+
+%packages
+
+-sssd-common
+
+ansible
+
+%end
