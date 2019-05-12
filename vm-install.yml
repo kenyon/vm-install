@@ -24,6 +24,7 @@ defaults: &defaults
   serial: pty
   # Need package ovmf for UEFI.
   boot: uefi
+  autostart:
 
 # OS defaults
 
