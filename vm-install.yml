@@ -41,7 +41,6 @@ fedora: &fedora
 
 rhel: &rhel
   <<: *defaults
-  os-variant: rhel7
 
 # Specific VM instances
 
