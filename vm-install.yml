@@ -27,13 +27,13 @@ defaults: &defaults
 
 # OS defaults
 
-debian: &debian
+debian_defaults: &debian_defaults
   <<: *defaults
   os-variant: debian9
   location: https://deb.debian.org/debian/dists/stable/main/installer-amd64/
   initrd-inject: preseed.cfg
 
-fedora: &fedora
+fedora_defaults: &fedora_defaults
   <<: *defaults
   location: https://mirrors.kernel.org/fedora/releases/30/Everything/x86_64/os/
   # Note: https://bugzilla.redhat.com/show_bug.cgi?id=1686464
@@ -41,18 +41,15 @@ fedora: &fedora
   initrd-inject: anaconda-ks.cfg
   extra-args: inst.ks=file:/anaconda-ks.cfg
 
-rhel: &rhel
-  <<: *defaults
-
 # Specific VM instances
 
 test1:
-  <<: *debian
+  <<: *debian_defaults
   disk: size=10,path=/data/vms/test1.sda
 
-test3:
-  <<: *fedora
-  disk: size=10,path=/data/vms/test3.sda
+fedora:
+  <<: *fedora_defaults
+  disk: size=10,path=/data/vms/fedora.sda
 
 # Local Variables:
 # coding: utf-8
