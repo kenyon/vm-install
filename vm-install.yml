@@ -35,7 +35,9 @@ debian: &debian
 
 fedora: &fedora
   <<: *defaults
-  location: https://mirrors.kernel.org/fedora/releases/30/Server/x86_64/os/
+  location: https://mirrors.kernel.org/fedora/releases/30/Everything/x86_64/os/
+  # Note: https://bugzilla.redhat.com/show_bug.cgi?id=1686464
+  # https://github.com/virt-manager/virt-manager/commit/c6b5f22fa61d87557b5fab23be080073d2f7906e
   initrd-inject: anaconda-ks.cfg
   extra-args: inst.ks=file:/anaconda-ks.cfg
 
@@ -48,9 +50,9 @@ test1:
   <<: *debian
   disk: size=10,path=/data/vms/test1.sda
 
-test2:
+test3:
   <<: *fedora
-  disk: size=10,path=/data/vms/test2.sda
+  disk: size=10,path=/data/vms/test3.sda
 
 # Local Variables:
 # coding: utf-8

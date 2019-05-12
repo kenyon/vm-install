@@ -1,13 +1,16 @@
 text
-url --url="https://mirrors.kernel.org/fedora/releases/30/Server/x86_64/os/"
+install
+url --metalink="https://mirrors.fedoraproject.org/metalink?repo=fedora-30&arch=x86_64"
+repo --name=updates --metalink="https://mirrors.fedoraproject.org/metalink?repo=updates-released-f30&arch=x86_64"
 
 keyboard --vckeymap=us-dvorak --xlayouts='us (dvorak)'
 lang en_US.UTF-8
 timezone America/Los_Angeles --isUtc
 
+clearpart --all
+zerombr
 bootloader --location=mbr
 autopart --type=plain
-clearpart --all --initlabel
 
 firewall --disable
 network --bootproto=dhcp --device=link --ipv6=auto --activate
@@ -27,8 +30,7 @@ reboot
 
 %packages
 
--sssd-common
-
 ansible
+etckeeper
 
 %end
