@@ -42,6 +42,10 @@ fedora_defaults: &fedora_defaults
   initrd-inject: anaconda-ks.cfg
   extra-args: inst.ks=file:/anaconda-ks.cfg
 
+rhel_defauts: &rhel_defaults
+  <<: *defaults
+  cdrom: /var/lib/libvirt/images/rhel-8.0-x86_64-dvd.iso
+
 # Specific VM instances
 
 test1:
@@ -51,6 +55,10 @@ test1:
 fedora:
   <<: *fedora_defaults
   disk: size=10,path=/data/vms/fedora.sda
+
+rhel:
+  <<: *rhel_defaults
+  disk: size=10,path=/data/vms/rhel.sda
 
 # Local Variables:
 # coding: utf-8
