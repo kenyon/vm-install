@@ -8,7 +8,7 @@ vm-install-options:
   templates:
     - preseed.cfg.erb
     - anaconda-ks.cfg.erb
-  domain: kenyonralph.com
+  domain: cmms-rb.local
 
 # Keys in the mappings below are virt-install(1) options, and values
 # are the arguments to those options, just like you would specify on
@@ -16,6 +16,8 @@ vm-install-options:
 
 defaults: &defaults
   connect: qemu:///system
+  graphics: vnc,listen=0.0.0.0
+  noautoconsole:
   virt-type: kvm
   memory: 4096
   cpu: host
