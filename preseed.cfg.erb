@@ -65,6 +65,6 @@ d-i grub-installer/with_other_os boolean true
 d-i grub-installer/bootdev  string default
 d-i finish-install/reboot_in_progress note
 d-i preseed/late_command string \
-    in-target mkdir --mode=0700 ~kenyon/.ssh; \
-    in-target wget --output-document=~kenyon/.ssh/authorized_keys https://github.com/kenyon.keys; \
-    in-target chmod 0600 ~kenyon/.ssh/authorized_keys;
+    in-target mkdir --mode=0700 /home/kenyon/.ssh; \
+    in-target wget --output-document=/home/kenyon/.ssh/authorized_keys https://github.com/kenyon.keys; \
+    in-target chmod 0600 /home/kenyon/.ssh/authorized_keys;
