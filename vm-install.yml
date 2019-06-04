@@ -50,9 +50,9 @@ rhel_defauts: &rhel_defaults
 
 # Specific VM instances
 
-test1:
+munin:
   <<: *debian_defaults
-  disk: size=10,path=/data/vms/test1.sda
+  disk: size=10,path=/var/lib/libvirt/images/munin.sda
 
 fedora:
   <<: *fedora_defaults
