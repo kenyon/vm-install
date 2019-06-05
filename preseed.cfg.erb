@@ -67,5 +67,7 @@ d-i grub-installer/bootdev  string default
 d-i finish-install/reboot_in_progress note
 d-i preseed/late_command string \
     in-target mkdir --mode=0700 /home/kenyon/.ssh; \
+    in-target chown kenyon: /home/kenyon/.ssh; \
     in-target env https_proxy=http://10.10.82.116:3128 wget --output-document=/home/kenyon/.ssh/authorized_keys https://github.com/kenyon.keys; \
-    in-target chmod 0600 /home/kenyon/.ssh/authorized_keys;
+    in-target chmod 0600 /home/kenyon/.ssh/authorized_keys; \
+    in-target chown kenyon: /home/kenyon/.ssh/authorized_keys;
