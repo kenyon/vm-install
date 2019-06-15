@@ -57,7 +57,7 @@ d-i partman/confirm_nooverwrite boolean true
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 tasksel tasksel/first multiselect
-d-i pkgsel/include string ssh wget etckeeper python3
+d-i pkgsel/include string ssh wget etckeeper python3 qemu-guest-agent
 d-i pkgsel/upgrade select full-upgrade
 popularity-contest popularity-contest/participate boolean true
 d-i grub-installer/only_debian boolean true
