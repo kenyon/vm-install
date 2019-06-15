@@ -26,12 +26,6 @@ The "presets" are just predefined `virt-install` options. Presets are
 defined in a YAML configuration file, called `vm-install.yml` by
 default.
 
-## To do
-
-* kickstart and preseed files, as ERB templates.
-* debian: late_command script
-* postinst tarball?
-
 <!--
 Local Variables:
 coding: utf-8
