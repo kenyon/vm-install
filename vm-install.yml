@@ -48,9 +48,9 @@ rhel_defauts: &rhel_defaults
 
 # Specific VM instances
 
-test1:
+puppet:
   <<: *debian_defaults
-  disk: size=10,path=/data/vms/test1.sda
+  disk: size=10,path=/data/vms/puppet.sda
 
 fedora:
   <<: *fedora_defaults
