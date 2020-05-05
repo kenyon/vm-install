@@ -58,7 +58,7 @@ d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 d-i apt-setup/security_host string deb.debian.org
 tasksel tasksel/first multiselect
-d-i pkgsel/include string ssh wget etckeeper aptitude python3-apt ruby qemu-guest-agent
+d-i pkgsel/include string ssh wget etckeeper aptitude python-apt python3-apt ruby qemu-guest-agent
 d-i pkgsel/upgrade select full-upgrade
 popularity-contest popularity-contest/participate boolean true
 d-i grub-installer/only_debian boolean true
