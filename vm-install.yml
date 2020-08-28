@@ -46,6 +46,11 @@ rhel_defauts: &rhel_defaults
   <<: *defaults
   cdrom: /var/lib/libvirt/images/rhel-8.0-x86_64-dvd.iso
 
+ubuntu_defaults: &ubuntu_defaults
+  <<: *defaults
+  os-variant: ubuntu19.04
+  location: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/
+
 # Specific VM instances
 
 debian:
@@ -59,6 +64,10 @@ fedora:
 rhel:
   <<: *rhel_defaults
   disk: size=10,path=/data/vms/rhel.sda
+
+ubuntu:
+  <<: *ubuntu_defaults
+  disk: size=10,path=/data/vms/ubuntu.sda
 
 # Local Variables:
 # coding: utf-8
