@@ -69,6 +69,12 @@ ubuntu:
   <<: *ubuntu_defaults
   disk: size=10,path=/data/vms/ubuntu.sda
 
+ubuntu1804:
+  <<: *defaults
+  os-variant: ubuntu18.04
+  disk: size=10,path=/data/vms/ubuntu1804.sda
+  location: http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/
+
 # Local Variables:
 # coding: utf-8
 # End:
