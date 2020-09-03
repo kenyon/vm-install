@@ -50,8 +50,12 @@ rhel_defauts: &rhel_defaults
 
 ubuntu_defaults: &ubuntu_defaults
   <<: *defaults
+  # 19.04 the newest ubuntu that "osinfo-query os" has, even though focal == 20.04.
   os-variant: ubuntu19.04
   location: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/
+  initrd-inject: preseed.cfg
+  vm-install-preset-options:
+    suite: focal
 
 # Specific VM instances
 
