@@ -2,18 +2,38 @@
 #_preseed_V1
 
 d-i debian-installer/locale string en_US.UTF-8
+
+d-i console-setup/ask_detect boolean false
+d-i console-setup/detect detect-keyboard us:dvorak
+d-i keyboard-configuration/layoutcode string us
+d-i keyboard-configuration/variantcode string dvorak
 d-i keyboard-configuration/xkb-keymap select us(dvorak)
+
 d-i netcfg/choose_interface select auto
 d-i netcfg/get_hostname string <%= options.name %>
 d-i netcfg/get_domain string <%= vm_install_options['domain'] %>
 d-i netcfg/wireless_wep string
 d-i hw-detect/load_firmware boolean false
+
+d-i mirror/suite string <%= vm_install_preset_options['suite'] %>
 d-i mirror/country string manual
+
+<% if options.preset =~ /debian/ %>
 d-i mirror/protocol select https
 d-i mirror/https/hostname string deb.debian.org
 d-i mirror/https/directory string /debian
 d-i mirror/https/proxy string
-d-i mirror/suite string stable
+d-i apt-setup/security_host string deb.debian.org
+<% end %>
+
+<% if options.preset =~ /ubuntu/ %>
+# Ubuntu doesn't do https https://bugs.launchpad.net/ubuntu/+bug/1464064
+d-i mirror/http/hostname string archive.ubuntu.com
+d-i mirror/http/mirror select archive.ubuntu.com
+d-i mirror/http/directory string /ubuntu
+d-i mirror/http/proxy string
+<% end %>
+
 d-i passwd/root-login boolean false
 d-i passwd/user-fullname string Kenyon Ralph
 d-i passwd/username string kenyon
@@ -56,9 +76,9 @@ d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
-d-i apt-setup/security_host string deb.debian.org
 tasksel tasksel/first multiselect
 d-i pkgsel/include string ssh wget etckeeper aptitude python-apt python3-apt ruby qemu-guest-agent
+pkgsel pkgsel/update-policy select unattended-upgrades
 d-i pkgsel/upgrade select full-upgrade
 popularity-contest popularity-contest/participate boolean true
 d-i grub-installer/only_debian boolean true

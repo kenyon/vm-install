@@ -90,6 +90,7 @@ end
 options.name = options.preset if options.name.nil?
 
 vm_install_options = config.delete('vm-install-options')
+vm_install_preset_options = config[options.preset].delete('vm-install-preset-options')
 
 vm_install_options['templates'].each do |template|
   File.open(template.split('.erb')[0], 'w') do |file|

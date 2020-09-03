@@ -33,6 +33,8 @@ debian_defaults: &debian_defaults
   os-variant: debian10
   location: https://deb.debian.org/debian/dists/stable/main/installer-amd64/
   initrd-inject: preseed.cfg
+  vm-install-preset-options:
+    suite: stable
 
 fedora_defaults: &fedora_defaults
   <<: *defaults
@@ -69,11 +71,14 @@ ubuntu:
   <<: *ubuntu_defaults
   disk: size=10,path=/data/vms/ubuntu.sda
 
-ubuntu1804:
+ubuntu1804: &ubuntu1804
   <<: *defaults
   os-variant: ubuntu18.04
   disk: size=10,path=/data/vms/ubuntu1804.sda
   location: http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/
+  initrd-inject: preseed.cfg
+  vm-install-preset-options:
+    suite: bionic
 
 # Local Variables:
 # coding: utf-8
