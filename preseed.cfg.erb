@@ -77,7 +77,7 @@ d-i partman/confirm_nooverwrite boolean true
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 tasksel tasksel/first multiselect
-d-i pkgsel/include string ssh wget etckeeper aptitude python-apt python3-apt ruby qemu-guest-agent
+d-i pkgsel/include string ssh wget etckeeper aptitude python3-apt ruby qemu-guest-agent
 pkgsel pkgsel/update-policy select unattended-upgrades
 d-i pkgsel/upgrade select full-upgrade
 popularity-contest popularity-contest/participate boolean true
