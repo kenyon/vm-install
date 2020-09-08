@@ -8,7 +8,12 @@ virtual machines using virt-install.
 
 No installation necessary. Just have
 [ruby](https://www.ruby-lang.org/) and
-[virt-install](https://virt-manager.org/) installed.
+[virt-install](https://virt-manager.org/) installed. Also,
+[cloud-image-utils](https://tracker.debian.org/pkg/cloud-utils) is
+needed for `cloud-localds` to generate the ISO 9660 image containing
+the autoinstall configuration used by [Ubuntu
+Server's](https://ubuntu.com/server) installer,
+[subiquity](https://github.com/CanonicalLtd/subiquity).
 
 ## Usage
 

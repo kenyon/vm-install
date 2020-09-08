@@ -1,0 +1,26 @@
+#cloud-config
+autoinstall:
+  version: 1
+  refresh-installer:
+    update: true
+  system_upgrade:
+    enabled: true
+  identity:
+    hostname: <%= options.name %>
+    password: $6$fNO2lbEJ6PwWF/aZ$AgoXU7xiQ7NMNDXHH.vt12FMT3vsBr6cKOqgTJWOWRt0nAwvsdGcFa.lP9HNDYV4zoAjZGf5MBAA7TrKtD8a81
+    realname: Kenyon Ralph
+    username: kenyon
+  keyboard:
+    layout: us
+    variant: dvorak
+  locale: en_US
+  ssh:
+    allow-pw: false
+    authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKcX1L+30WOCRpdhUAUBB7MedN2hteApi8E7RUVOPxsO kenyon@einstein
+    install-server: true
+  packages:
+    - etckeeper
+    - aptitude
+    - qemu-guest-agent
+    - ruby

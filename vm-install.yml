@@ -8,6 +8,7 @@ vm-install-options:
   templates:
     - preseed.cfg.erb
     - anaconda-ks.cfg.erb
+    - user-data.erb
   domain: kenyonralph.com
 
 # Keys in the mappings below are virt-install(1) options, and values
@@ -75,6 +76,10 @@ ubuntu:
   <<: *ubuntu_defaults
   disk: size=10,path=/data/vms/ubuntu.sda
 
+ubuntu-test:
+  <<: *ubuntu_defaults
+  disk: size=10,path=/data/vms/ubuntu-test.sda
+
 ubuntu1804: &ubuntu1804
   <<: *defaults
   os-variant: ubuntu18.04
@@ -83,6 +88,28 @@ ubuntu1804: &ubuntu1804
   initrd-inject: preseed.cfg
   vm-install-preset-options:
     suite: bionic
+
+ubuntu1804test:
+  <<: *ubuntu1804
+  disk: size=10,path=/data/vms/ubuntu1804test.sda
+
+ubuntu2004test:
+  <<: *defaults
+  os-variant: ubuntu19.04
+  cdrom: /var/lib/libvirt/images/ubuntu-20.04.1-live-server-amd64.iso
+  disk: size=10,path=/data/vms/ubuntu2004test.sda
+  vm-install-preset-options:
+    suite: focal
+
+ubuntu2004autoinstall:
+  <<: *defaults
+  os-variant: ubuntu19.04
+  disk: device=cdrom,path=cidata.iso
+  cdrom: /var/lib/libvirt/images/ubuntu-20.04.1-live-server-amd64.iso
+  # add a space to make the key unique, since this is a hash and there is another disk key above.
+  'disk ': size=10,path=/data/vms/ubuntu2004autoinstall.sda
+  vm-install-preset-options:
+    suite: focal
 
 # Local Variables:
 # coding: utf-8

@@ -23,6 +23,7 @@
 version = '0.0.0'
 
 require 'erb'
+require 'fileutils'
 require 'optparse'
 require 'ostruct'
 require 'yaml'
@@ -95,6 +96,11 @@ vm_install_options['templates'].each do |template|
     file.puts(ERB.new(File.read(template)).result)
   end
 end
+
+# Create the Ubuntu Server autoinstall ISO.
+FileUtils.touch('meta-data')
+FileUtils.rm('cidata.iso', force: true)
+system('cloud-localds cidata.iso user-data meta-data')
 
 cmd = 'virt-install --name ' + options.name
 

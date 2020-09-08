@@ -1,3 +1,6 @@
 # Files generated from templates.
 anaconda-ks.cfg
+cidata.iso
+meta-data
 preseed.cfg
+user-data
