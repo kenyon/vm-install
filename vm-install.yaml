@@ -39,6 +39,7 @@ debian_defaults: &debian_defaults
 
 fedora_defaults: &fedora_defaults
   <<: *defaults
+  os-variant: fedora29
   location: https://mirrors.kernel.org/fedora/releases/35/Everything/x86_64/os/
   # Note: https://bugzilla.redhat.com/show_bug.cgi?id=1686464
   # https://github.com/virt-manager/virt-manager/commit/c6b5f22fa61d87557b5fab23be080073d2f7906e
