@@ -23,12 +23,12 @@ The `--help` output:
     Install a new virtual machine (using virt-install(1)).
 
         -n, --name=NAME                  Name to call the new VM; default: same as PRESET
-        -c, --config=CONFIG              config file to use; default: vm-install.yml in the current directory
+        -c, --config=CONFIG              config file to use; default: vm-install.yaml in the current directory
         -h, --help                       Show this help and exit
         -V, --version                    Output version information and exit
 
 The "presets" are just predefined `virt-install` options. Presets are
-defined in a YAML configuration file, called `vm-install.yml` by
+defined in a YAML configuration file, called `vm-install.yaml` by
 default.
 
 <!--

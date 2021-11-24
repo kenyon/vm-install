@@ -28,7 +28,7 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 
-DEFAULT_CFG_FILE = 'vm-install.yml'.freeze
+DEFAULT_CFG_FILE = 'vm-install.yaml'.freeze
 
 options = OpenStruct.new
 
