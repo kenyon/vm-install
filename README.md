@@ -31,6 +31,11 @@ The "presets" are just predefined `virt-install` options. Presets are
 defined in a YAML configuration file, called `vm-install.yaml` by
 default.
 
+## History
+
+Originally a fork of [TaylorBurnham/debian-vm-install](https://github.com/TaylorBurnham/debian-vm-install),
+this project was completely rewritten in [commit 353c653f83](https://github.com/kenyon/vm-install/commit/353c653f83551deaf33d5856ed79669f09130219).
+
 <!--
 Local Variables:
 coding: utf-8
